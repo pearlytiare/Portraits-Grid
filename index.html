@@ -87,6 +87,7 @@
     images.forEach(img => {
       const a = document.createElement("a");
       a.href = img.link;
+      a.target="_blank";
       const image = document.createElement("img");
       image.src = img.url;
       image.alt = img.alt;
