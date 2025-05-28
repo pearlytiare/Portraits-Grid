@@ -7,35 +7,23 @@
   <style>
     body {
       margin: 0;
-      padding: 2rem;
+      padding: 0; /* Removed top padding */
       font-family: sans-serif;
       background: #fff;
     }
     .grid {
       display: grid;
-      grid-template-columns: 1fr; /* Default: 1 column */
+      grid-template-columns: repeat(3, 1fr); /* 3 columns on desktop */
       gap: 24px;
+      padding: 2rem; /* Retain padding around grid content if needed */
     }
-
-    @media (min-width: 600px) {
-      .grid {
-        grid-template-columns: repeat(2, 1fr); /* 2 columns on medium screens */
-      }
-    }
-
-    @media (min-width: 900px) {
-      .grid {
-        grid-template-columns: repeat(3, 1fr); /* 3 columns on large screens */
-      }
-    }
-
     .grid a {
       display: block;
       border: 2px solid #eee;
       border-radius: 12px;
       overflow: hidden;
       transition: transform 0.2s ease;
-      aspect-ratio: 3 / 4; /* Ensures a 3:4 rectangle */
+      aspect-ratio: 3 / 4;
     }
     .grid a:hover {
       transform: scale(1.03);
@@ -44,8 +32,15 @@
     .grid img {
       width: 100%;
       height: 100%;
-      object-fit: cover; /* Ensures uniform size and crops */
+      object-fit: cover;
       display: block;
+    }
+
+    /* Responsive layout for phones */
+    @media (max-width: 500px) {
+      .grid {
+        grid-template-columns: 1fr; /* 1 column */
+      }
     }
   </style>
 </head>
@@ -100,7 +95,6 @@
     images.forEach(img => {
       const a = document.createElement("a");
       a.href = img.link;
-      a.target = "_self"; // Opens in new tab; change to "_self" if you want same tab
       const image = document.createElement("img");
       image.src = img.url;
       image.alt = img.alt;
