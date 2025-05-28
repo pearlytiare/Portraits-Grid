@@ -13,9 +13,22 @@
     }
     .grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr); /* Exactly 3 columns */
+      grid-template-columns: 1fr; /* Default: 1 column */
       gap: 24px;
     }
+
+    @media (min-width: 600px) {
+      .grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns on medium screens */
+      }
+    }
+
+    @media (min-width: 900px) {
+      .grid {
+        grid-template-columns: repeat(3, 1fr); /* 3 columns on large screens */
+      }
+    }
+
     .grid a {
       display: block;
       border: 2px solid #eee;
@@ -51,7 +64,7 @@
         link: "https://www.nataliejeng.com/paintings/portraits/daniel",
         alt: "Daniel"
       },
-       {
+      {
         url: "https://drive.google.com/thumbnail?id=1Lu5iK_oJNVHAIW9VflvltEEb92ih65l8",
         link: "https://www.nataliejeng.com/paintings/portraits/nick",
         alt: "Nick"
@@ -66,12 +79,12 @@
         link: "https://www.nataliejeng.com/paintings/portraits/christian",
         alt: "Christian"
       },
-            {
+      {
         url: "https://drive.google.com/thumbnail?id=1-zYeaOOSsMqRfw-vNE9E5kTRIXtdakk-",
         link: "https://www.nataliejeng.com/paintings/portraits/coral",
         alt: "Coral"
       },
-            {
+      {
         url: "https://drive.google.com/thumbnail?id=1YKlZDwqzthMn__yypw2E38yquOWkFt6d",
         link: "https://www.nataliejeng.com/paintings/portraits/george",
         alt: "George"
@@ -87,7 +100,7 @@
     images.forEach(img => {
       const a = document.createElement("a");
       a.href = img.link;
-      a.target="_blank";
+      a.target = "_self"; // Opens in new tab; change to "_self" if you want same tab
       const image = document.createElement("img");
       image.src = img.url;
       image.alt = img.alt;
