@@ -12,12 +12,17 @@
       background: #fff;
     }
 
-    /* Desktop & Tablet: Grid Layout */
     .grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 24px;
       padding: 2rem;
+    }
+
+    @media (max-width: 1024px) {
+      .grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
     }
 
     .grid a {
@@ -26,7 +31,9 @@
       border-radius: 12px;
       overflow: hidden;
       transition: transform 0.2s ease;
-      aspect-ratio: 3 / 4;
+      aspect-ratio: 1 / 1; /* Force square grid cells */
+      background: #f9f9f9;
+      position: relative;
     }
 
     .grid a:hover {
@@ -35,87 +42,18 @@
     }
 
     .grid img {
+      position: absolute;
+      top: 50%;
+      left: 50%;
       width: 100%;
-      height: 100%;
+      height: 133%; /* Makes the image 3:4 inside 1:1 box */
       object-fit: cover;
-      display: block;
-    }
-
-    /* Mobile: Hide grid, show carousel */
-    @media (max-width: 480px) {
-      .grid {
-        display: none;
-      }
-
-      .carousel {
-        width: 100%;
-        aspect-ratio: 3 / 4;
-        position: relative;
-        overflow: hidden;
-        max-height: 100vh;
-      }
-
-      .carousel-track {
-        display: flex;
-        transition: transform 0.4s ease-in-out;
-        height: 100%;
-      }
-
-      .carousel-slide {
-        min-width: 100%;
-        height: 100%;
-        box-sizing: border-box;
-        border: 2px solid #eee;
-        border-radius: 12px;
-        overflow: hidden;
-      }
-
-      .carousel-slide img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-      }
-
-      .carousel-buttons {
-        position: absolute;
-        top: 50%;
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-        transform: translateY(-50%);
-        padding: 0 1rem;
-        pointer-events: none;
-      }
-
-      .carousel-button {
-        background: rgba(255, 255, 255, 0.7);
-        border: none;
-        border-radius: 50%;
-        font-size: 1.5rem;
-        cursor: pointer;
-        padding: 0.5rem 1rem;
-        pointer-events: auto;
-      }
-
-      body {
-        overflow-x: hidden;
-      }
+      transform: translate(-50%, -50%);
     }
   </style>
 </head>
 <body>
-  <!-- Grid for desktop/tablet -->
   <div class="grid" id="imageGrid"></div>
-
-  <!-- Carousel for mobile -->
-  <div class="carousel" id="carousel">
-    <div class="carousel-track" id="carouselTrack"></div>
-    <div class="carousel-buttons">
-      <button class="carousel-button" id="prevBtn">&#8592;</button>
-      <button class="carousel-button" id="nextBtn">&#8594;</button>
-    </div>
-  </div>
 
   <script>
     const images = [
@@ -162,54 +100,16 @@
     ];
 
     const grid = document.getElementById("imageGrid");
-    const carouselTrack = document.getElementById("carouselTrack");
-
     images.forEach(img => {
-      // Grid setup
       const a = document.createElement("a");
       a.href = img.link;
-      a.target = "_blank";
+      a.target = "_blank"; // Open in new tab
       const image = document.createElement("img");
       image.src = img.url;
       image.alt = img.alt;
       a.appendChild(image);
       grid.appendChild(a);
-
-      // Carousel setup
-      const slide = document.createElement("div");
-      slide.className = "carousel-slide";
-      const link = document.createElement("a");
-      link.href = img.link;
-      link.target = "_blank";
-      const slideImg = document.createElement("img");
-      slideImg.src = img.url;
-      slideImg.alt = img.alt;
-      link.appendChild(slideImg);
-      slide.appendChild(link);
-      carouselTrack.appendChild(slide);
     });
-
-    // Carousel navigation
-    let currentIndex = 0;
-    const prevBtn = document.getElementById("prevBtn");
-    const nextBtn = document.getElementById("nextBtn");
-
-    function updateCarousel() {
-      const offset = -currentIndex * 100;
-      carouselTrack.style.transform = `translateX(${offset}%)`;
-    }
-
-    prevBtn.onclick = () => {
-      currentIndex = (currentIndex - 1 + images.length) % images.length;
-      updateCarousel();
-    };
-
-    nextBtn.onclick = () => {
-      currentIndex = (currentIndex + 1) % images.length;
-      updateCarousel();
-    };
-
-    updateCarousel(); // Initialize
   </script>
 </body>
 </html>
