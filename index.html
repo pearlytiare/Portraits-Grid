@@ -7,16 +7,19 @@
   <style>
     body {
       margin: 0;
-      padding: 0; /* Removed top padding */
+      padding: 0;
       font-family: sans-serif;
       background: #fff;
     }
+
+    /* Desktop & Tablet: Grid Layout */
     .grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr); /* 3 columns on desktop */
+      grid-template-columns: repeat(3, 1fr);
       gap: 24px;
-      padding: 2rem; /* Retain padding around grid content if needed */
+      padding: 2rem;
     }
+
     .grid a {
       display: block;
       border: 2px solid #eee;
@@ -25,10 +28,12 @@
       transition: transform 0.2s ease;
       aspect-ratio: 3 / 4;
     }
+
     .grid a:hover {
       transform: scale(1.03);
       border-color: #999;
     }
+
     .grid img {
       width: 100%;
       height: 100%;
@@ -36,16 +41,74 @@
       display: block;
     }
 
-    /* Responsive layout for phones */
-    @media (max-width: 500px) {
+    /* Mobile: Hide grid, show carousel */
+    @media (max-width: 480px) {
       .grid {
-        grid-template-columns: repeat(2, 1fr); /* 1 column */
+        display: none;
+      }
+
+      .carousel {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 3 / 4;
+        overflow: hidden;
+      }
+
+      .carousel-track {
+        display: flex;
+        transition: transform 0.4s ease-in-out;
+        width: 100%;
+        height: 100%;
+      }
+
+      .carousel-slide {
+        min-width: 100%;
+        box-sizing: border-box;
+        border: 2px solid #eee;
+        border-radius: 12px;
+        overflow: hidden;
+      }
+
+      .carousel-slide img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .carousel-buttons {
+        position: absolute;
+        top: 50%;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        transform: translateY(-50%);
+        padding: 0 1rem;
+      }
+
+      .carousel-button {
+        background: rgba(255, 255, 255, 0.7);
+        border: none;
+        border-radius: 50%;
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: 0.5rem 1rem;
       }
     }
   </style>
 </head>
 <body>
+  <!-- Grid for desktop/tablet -->
   <div class="grid" id="imageGrid"></div>
+
+  <!-- Carousel for mobile -->
+  <div class="carousel" id="carousel">
+    <div class="carousel-track" id="carouselTrack"></div>
+    <div class="carousel-buttons">
+      <button class="carousel-button" id="prevBtn">&#8592;</button>
+      <button class="carousel-button" id="nextBtn">&#8594;</button>
+    </div>
+  </div>
 
   <script>
     const images = [
@@ -92,7 +155,10 @@
     ];
 
     const grid = document.getElementById("imageGrid");
+    const carouselTrack = document.getElementById("carouselTrack");
+
     images.forEach(img => {
+      // Grid setup
       const a = document.createElement("a");
       a.href = img.link;
       const image = document.createElement("img");
@@ -100,7 +166,41 @@
       image.alt = img.alt;
       a.appendChild(image);
       grid.appendChild(a);
+
+      // Carousel setup
+      const slide = document.createElement("div");
+      slide.className = "carousel-slide";
+      const link = document.createElement("a");
+      link.href = img.link;
+      const slideImg = document.createElement("img");
+      slideImg.src = img.url;
+      slideImg.alt = img.alt;
+      link.appendChild(slideImg);
+      slide.appendChild(link);
+      carouselTrack.appendChild(slide);
     });
+
+    // Carousel navigation
+    let currentIndex = 0;
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+
+    function updateCarousel() {
+      const offset = -currentIndex * 100;
+      carouselTrack.style.transform = `translateX(${offset}%)`;
+    }
+
+    prevBtn.onclick = () => {
+      currentIndex = (currentIndex - 1 + images.length) % images.length;
+      updateCarousel();
+    };
+
+    nextBtn.onclick = () => {
+      currentIndex = (currentIndex + 1) % images.length;
+      updateCarousel();
+    };
+
+    updateCarousel(); // Initialize
   </script>
 </body>
 </html>
